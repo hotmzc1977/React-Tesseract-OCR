@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import OCR from "./OCR";
 
-function App() {
+const App = () => {
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [text, setText] = useState('')
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const onExamineResult = async (result: Tesseract.RecognizeResult) => {
+    const l = result.data.lines.find(line => line.text.startsWith("Serial Number:"))
+    if (l) {
+      setText(l.text)
+      return true
+    };
+    return false;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: "center" }}>
+      <div style={{ margin: "auto", fontSize: "30px" }}>{`Result: ${text}`}</div>
+      <OCR onExamineResult={onExamineResult} size={{ width: 640, height: 480 }} />
     </div>
   );
-}
+};
 
 export default App;
