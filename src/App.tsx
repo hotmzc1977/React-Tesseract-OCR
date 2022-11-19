@@ -1,3 +1,4 @@
+import { TextField } from "@mui/material";
 import React, { useState } from "react";
 import OCR from "./OCR";
 
@@ -5,6 +6,7 @@ const App = () => {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [text, setText] = useState('')
+  const [find, setFind] = useState('Serial Number:')
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -15,7 +17,7 @@ const App = () => {
   };
 
   const onExamineResult = async (result: Tesseract.RecognizeResult) => {
-    const l = result.data.lines.find(line => line.text.startsWith("Serial Number:"))
+    const l = result.data.lines.find(line => line.text.startsWith(find))
     if (l) {
       setText(l.text)
       return true
@@ -29,8 +31,18 @@ const App = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <div style={{ margin: "auto", fontSize: "30px" }}>{`Result: ${text}`}</div>
-      <OCR onExamineResult={onExamineResult} size={{ width: 640, height: 480 }} onSelect={onSelect} />
+      <TextField
+        sx={{ width: "300px" }}
+        required
+        id="outlined-required"
+        label="Search in video"
+        value={find}
+        variant="standard"
+        helperText={`Result: ${text}`}
+        onChange={(e: any) => setFind(e.target.value)}
+      />
+
+      <OCR onExamineResult={onExamineResult} onSelect={onSelect} />
     </div>
   );
 };
