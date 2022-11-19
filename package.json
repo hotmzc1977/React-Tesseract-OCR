@@ -1,7 +1,7 @@
 {
   "name": "react-tesseract-ocr",
   "version": "0.1.0",
-  "homepage": "https://hotmzc1977.github.io/react-tesseract-ocr",
+  "homepage": "https://hotmzc1977.github.io/React-Tesseract-OCR/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
