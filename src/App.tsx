@@ -23,10 +23,14 @@ const App = () => {
     return false;
   }
 
+  const onSelect = async (text: string) => {
+    setText(text)
+  }
+
   return (
     <div style={{ textAlign: "center" }}>
       <div style={{ margin: "auto", fontSize: "30px" }}>{`Result: ${text}`}</div>
-      <OCR onExamineResult={onExamineResult} size={{ width: 640, height: 480 }} />
+      <OCR onExamineResult={onExamineResult} size={{ width: 640, height: 480 }} onSelect={onSelect} />
     </div>
   );
 };

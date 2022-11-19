@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Stream } from "stream";
 import Cropper from 'react-cropper'
 import "cropperjs/dist/cropper.css";
-import { Box, CircularProgress, Fab, Grid, Icon, IconButton, Switch, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, CircularProgress, Fab, FormControlLabel, Grid, Icon, IconButton, Switch, TextField, Tooltip, Typography } from "@mui/material";
 import Tesseract, { RecognizeResult } from 'tesseract.js';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
@@ -16,6 +16,7 @@ import FormatShapesIcon from '@mui/icons-material/FormatShapes';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import HdrAutoIcon from '@mui/icons-material/HdrAuto';
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
+import { fontSize } from "@mui/system";
 
 type Position = {
     top: number,
@@ -80,7 +81,7 @@ export default function OCR(props: Props) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const streamRef = useRef<MediaStream>()
     const workerRef = useRef<Tesseract.Worker>()
-
+    const imageRef = useRef<HTMLImageElement>(null)
 
     useEffect(() => {
         if (videoOffsetPosAndSize && videoSize) {
@@ -289,7 +290,7 @@ export default function OCR(props: Props) {
                 }}
                 style={{
                     position: "absolute",
-                    left: item.bbox.x0 * (autoMode ? videoZoom : zoomCropData),
+                    left: item.bbox.x0 * (autoMode ? videoZoom : zoomCropData) + (autoMode ? 0 : (OCRSize.width - (zoomCropData * (imageRef.current?.offsetWidth ?? 0))) / 2),
                     top: autoMode ? (item.bbox.y0 + ((videoSize?.height ?? 0) - (cropArea?.height ?? 0)) / 2) * videoZoom : item.bbox.y0 * zoomCropData,
                     width: (item.bbox.x1 - item.bbox.x0) * (autoMode ? videoZoom : zoomCropData),
                     height: (item.bbox.y1 - item.bbox.y0) * (autoMode ? videoZoom : zoomCropData),
@@ -297,12 +298,12 @@ export default function OCR(props: Props) {
                     backgroundColor: "transparent",
                     color: "red",
                     overflow: "visible"
-                }}><div style={{ position: "relative", overflow: "visible", height: "100%" }}>
+                }}> <div style={{ position: "relative", overflow: "visible", height: "100%" }}>
                     <div style={{ position: "absolute", width: "80%", bottom: "100%", color: "#fb4d3d", overflow: "hidden", fontSize: "10px", display: "block", whiteSpace: "nowrap" }}>
                         {item.text}
                     </div>
                 </div>
-            </div> : null
+            </div > : null
 
         })
     }
@@ -523,7 +524,7 @@ export default function OCR(props: Props) {
 
                     {
                         scenario === "recognize" && cropData &&
-                        <img style={{ zoom: zoomCropData }} src={cropData} alt="cropped" />
+                        <img ref={imageRef} style={{ zoom: zoomCropData }} src={cropData} alt="cropped" />
                     }
                     <canvas ref={previewCanvasRef} hidden />
 
@@ -578,13 +579,13 @@ export default function OCR(props: Props) {
                 </Box>
 
             }
-            <Fab aria-label="Auto Mode" onClick={() => setAutoMode(autoMode => !autoMode)} size="small" style={{
+            {/* <Fab aria-label="Auto Mode" onClick={() => setAutoMode(autoMode => !autoMode)} size="small" style={{
                 position: 'absolute',
                 bottom: 5,
                 left: 5
             }}>
                 <HdrAutoIcon color={autoMode ? undefined : "disabled"} />
-            </Fab>
+            </Fab> */}
             {/* {
                 scenario === "camera" && <Fab color="default" aria-label="add" size="small" style={{
                     position: 'absolute',
@@ -594,7 +595,7 @@ export default function OCR(props: Props) {
                     <CenterFocusStrongIcon />
                 </Fab>
             } */}
-            {
+            {/* {
                 <Fab aria-label="add" size="small" style={{
                     position: 'absolute',
                     bottom: 50,
@@ -602,9 +603,9 @@ export default function OCR(props: Props) {
                 }} onClick={onStyleChanged}>
                     <LineStyleIcon />
                 </Fab>
-            }
+            } */}
 
-            {scenario !== "camera" && <Fab aria-label="add" size="small" style={{
+            {<Fab aria-label="add" size="small" style={{
                 position: 'absolute',
                 bottom: 50,
                 right: 5
@@ -620,7 +621,7 @@ export default function OCR(props: Props) {
                 <FileUploadIcon />
             </Fab>
 
-            {scenario === "recognize" && <Fab onClick={() => { setScenario("crop"); setResult(undefined) }} size="small" style={{
+            {<Fab onClick={() => { setScenario("crop"); setResult(undefined) }} size="small" style={{
                 position: 'absolute',
                 bottom: 95,
                 right: 5
@@ -636,19 +637,20 @@ export default function OCR(props: Props) {
                 <PhotoCameraIcon fontSize="large" />
             </Fab>
 
-            {scenario === "recognize" && <IconButton aria-label="Zoom In" onClick={zoomIn} size="large" style={{
+            {<IconButton aria-label="Zoom In" onClick={zoomIn} size="large" style={{
                 position: 'absolute',
                 bottom: 0,
                 right: OCRSize.width / 2 - 100,
             }} >
-                <ZoomInIcon fontSize="large" />
+                <ZoomInIcon fontSize="large" color="info" />
             </IconButton>}
-            {scenario === "recognize" && <IconButton aria-label="Zoom Out" onClick={zoomOut} size="large" style={{
+            {<IconButton aria-label="Zoom Out" onClick={zoomOut} size="large" style={{
                 position: 'absolute',
                 bottom: 0,
                 left: OCRSize.width / 2 - 100,
+
             }}>
-                <ZoomOutIcon fontSize="large" />
+                <ZoomOutIcon fontSize="large" color="info" />
             </IconButton>}
 
             {/* <Fab aria-label="Crop" onClick={() => setScenario("crop")} size="small" style={{
@@ -659,6 +661,16 @@ export default function OCR(props: Props) {
                 { <HighlightAltIcon />}
             </Fab> */}
 
+            <Switch sx={{
+                position: 'absolute',
+                bottom: 5,
+                left: 5,
+                backgroundColor: "white",
+                margin: 0,
+                borderRadius: "20px",
+                fontSize: "8px"
+            }} color="secondary" checked={autoMode} onChange={(_, checked: boolean) => setAutoMode(checked)}
+            />
 
 
 
