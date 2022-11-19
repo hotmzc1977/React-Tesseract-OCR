@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/react-tesseract-ocr/static/js/main.e8a6c0a9.chunk.js",
+    "main.js.map": "/react-tesseract-ocr/static/js/main.e8a6c0a9.chunk.js.map",
+    "runtime-main.js": "/react-tesseract-ocr/static/js/runtime-main.db987f93.js",
+    "runtime-main.js.map": "/react-tesseract-ocr/static/js/runtime-main.db987f93.js.map",
+    "static/css/2.2a338543.chunk.css": "/react-tesseract-ocr/static/css/2.2a338543.chunk.css",
+    "static/js/2.f205b547.chunk.js": "/react-tesseract-ocr/static/js/2.f205b547.chunk.js",
+    "static/js/2.f205b547.chunk.js.map": "/react-tesseract-ocr/static/js/2.f205b547.chunk.js.map",
+    "index.html": "/react-tesseract-ocr/index.html",
+    "static/css/2.2a338543.chunk.css.map": "/react-tesseract-ocr/static/css/2.2a338543.chunk.css.map",
+    "static/js/2.f205b547.chunk.js.LICENSE.txt": "/react-tesseract-ocr/static/js/2.f205b547.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.db987f93.js",
+    "static/css/2.2a338543.chunk.css",
+    "static/js/2.f205b547.chunk.js",
+    "static/js/main.e8a6c0a9.chunk.js"
+  ]
+}
