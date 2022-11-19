@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 /.pnp
+/static
+/.vscode
+/build
 .pnp.js
 
 # testing
